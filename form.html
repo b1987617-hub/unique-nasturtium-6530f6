@@ -70,6 +70,12 @@ select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns=
   border-radius:8px;padding:10px 12px;margin-top:10px;line-height:1.7;
 }
 
+.notice{
+  font-size:13.5px;color:var(--sage-deep);background:#F1F6F2;
+  border:1px solid #CFE2D5;border-radius:8px;padding:12px 15px;
+  margin-bottom:18px;line-height:1.8;
+}
+.notice b{color:var(--ink)}
 .err{
   display:none;font-size:13.5px;color:var(--warn);background:var(--warn-bg);
   border:1px solid #E9C3C0;border-radius:8px;padding:11px 13px;margin-bottom:18px;
@@ -106,6 +112,7 @@ button.go:disabled{opacity:.55;cursor:default}
     <h1>需求登記</h1>
     <p class="lede">約 30 秒，我們會盡快為您配對合適方案</p>
 
+    <div class="notice" id="notice" hidden></div>
     <div class="err" id="err"></div>
 
     <div class="fld">
@@ -241,6 +248,14 @@ button.go:disabled{opacity:.55;cursor:default}
     $('taxBlock').hidden = false;
     $('tip').textContent = '由櫃檯人員協助填寫';
   }
+  // 實體辦公室十月才開放進駐。不講清楚，客人會以為現在就能進來，
+  // 承辦得在回覆時再解釋一次 —— 那一輪往返是可以省掉的。
+  if (SRC.indexOf('office') >= 0) {
+    var n = $('notice');
+    n.innerHTML = '<b>實體辦公室預計 10 月開放進駐。</b>現在登記，開放時我們會第一批通知您，並保留優先看房。';
+    n.hidden = false;
+  }
+
   render();
 
   function fail(msg){
