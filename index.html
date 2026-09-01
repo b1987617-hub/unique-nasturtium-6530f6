@@ -655,14 +655,48 @@
     data.utm_source=_p.get('utm_source')||''; data.utm_medium=_p.get('utm_medium')||'';
     data.utm_campaign=_p.get('utm_campaign')||''; data.utm_term=_p.get('utm_term')||'';
     data.utm_content=_p.get('utm_content')||''; data.referrer=document.referrer||'';
+
+    // 這筆詢問實際從哪裡來 —— 系統自己判斷，不問客人。
+    // 表單裡「您從哪裡得知我們」那題保留著，但客人自己分不出自然搜尋與付費廣告，
+    // 所以那題回答不了「哪一檔廣告有效」。這一欄才是拿來算成效的。
+    data.src = (function(){
+      if (_p.get('utm_campaign')) return 'ads_' + _p.get('utm_campaign');   // 廣告網址帶 utm 進來
+      if (_p.get('src'))          return _p.get('src');                       // 名片 QR、文章、轉介連結自己帶
+      var r = document.referrer || '';
+      var host = (r.split('/')[2] || '').toLowerCase();
+      if (!host || host === location.host)                              return 'web_direct';
+      if (host.indexOf('google.') >= 0)                               return 'seo_google';
+      if (host.indexOf('bing.') >= 0 || host.indexOf('yahoo.') >= 0) return 'seo_other';
+      if (host.indexOf('facebook.') >= 0 || host.indexOf('instagram.') >= 0) return 'social_meta';
+      if (host.indexOf('line.') >= 0)                                 return 'social_line';
+      return 'ref_' + host.replace(/[^a-z0-9.]/g, '').slice(0, 40);
+    })();
     if(FORM_ENDPOINT.indexOf('PASTE_YOUR')===0){msg.className='form-msg err';msg.textContent='表單尚未連線，請先設定 Apps Script 網址。';return;}
     btn.disabled=true; const orig=btn.textContent; btn.textContent='送出中…';
-    var _payload=JSON.stringify(data), _sent=false;
-    try{ _sent=navigator.sendBeacon(FORM_ENDPOINT, new Blob([_payload],{type:'text/plain;charset=utf-8'})); }catch(_e){ _sent=false; }
-    if(!_sent){ try{ fetch(FORM_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:_payload}); }catch(_e){} }
-    bf.reset(); newCaptcha(); msg.className='form-msg ok'; msg.textContent='已收到您的預約！我們將盡快與您聯繫，感謝您。';
-    if(window.gtag) gtag('event','generate_lead',{form:'booking', need_type:data.type||'', size:data.size||''});
-    btn.disabled=false; btn.textContent=orig;
+
+    // 真的等伺服器回應再決定顯示什麼。
+    // 舊寫法用 sendBeacon 送完就一律顯示成功 —— 送失敗時客人以為填好了，
+    // 表單也被清空，那筆詢問就永遠不見了，而且沒有人會知道。
+    try{
+      const _r = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+      const _j = await _r.json();
+      if (!_j || !_j.success) throw new Error((_j && _j.error) || '伺服器沒有確認收到');
+
+      bf.reset(); newCaptcha();
+      msg.className='form-msg ok';
+      msg.textContent='已收到您的預約！我們將盡快與您聯繫，感謝您。';
+      if(window.gtag) gtag('event','generate_lead',{form:'booking', need_type:data.type||'', size:data.size||''});
+    }catch(_err){
+      // 失敗時絕對不要清空表單 —— 要客人重打一次，等於直接放棄這筆。
+      msg.className='form-msg err';
+      msg.innerHTML='送出失敗，您填的資料還在。請再按一次送出，或直接來電 <a href="tel:0365611163">03-6561163</a>、加 LINE <a href="https://line.me/R/ti/p/@baseonspace" target="_blank" rel="noopener">@baseonspace</a>。';
+    }finally{
+      btn.disabled=false; btn.textContent=orig;
+    }
   });}
 
   // GA4 — 追蹤聯絡轉換點擊
