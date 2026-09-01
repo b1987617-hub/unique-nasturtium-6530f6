@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>需求登記｜貝森國際商務中心</title>
+<meta name="description" content="30 秒填寫需求，貝森國際商務中心將為您配對合適的竹北辦公室、共享空間、會議室或工商登記方案。">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --ink:#20384A; --navy:#34526E; --steel:#5C7D97;
+  --sage:#6E9B7E; --sage-deep:#4F7460;
+  --paper:#FAFBFC; --mist:#EEF2F4; --line:#DBE2E7;
+  --muted:#6B7C88; --white:#FFFFFF;
+  --warn:#B3261E; --warn-bg:#FDF3F2;
+  --serif:"Noto Serif TC",Georgia,"Songti TC",serif;
+  --sans:"Noto Sans TC",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:560px;margin:0 auto;padding:26px 20px 64px}
+
+header{text-align:center;padding:8px 0 20px;border-bottom:1px solid var(--line);margin-bottom:26px}
+header img{width:186px;height:auto;display:block;margin:0 auto}
+
+h1{font-family:var(--serif);font-size:24px;font-weight:600;margin:0 0 6px;text-align:center}
+.lede{font-size:13.5px;color:var(--muted);text-align:center;margin:0 0 26px}
+
+.fld{margin-bottom:20px}
+label{display:block;font-size:13px;font-weight:500;margin-bottom:7px;color:var(--ink)}
+.req{color:var(--sage-deep);margin-left:2px}
+.opt{color:var(--muted);font-weight:400;font-size:11.5px;margin-left:5px}
+
+input,select,textarea{
+  width:100%;font-family:inherit;font-size:15px;padding:11px 13px;
+  border:1px solid var(--line);border-radius:8px;background:var(--white);color:var(--ink);
+}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--sage);outline-offset:1px;border-color:var(--sage)}
+textarea{resize:vertical;min-height:78px}
+select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%236B7C88' stroke-width='1.6'/></svg>");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{
+  font-family:inherit;font-size:14px;padding:9px 16px;border-radius:22px;
+  border:1px solid var(--line);background:var(--white);color:var(--ink);cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.chips button[aria-pressed="true"]{
+  background:var(--sage);border-color:var(--sage);color:var(--white);font-weight:500;
+}
+.chips button:focus-visible{outline:2px solid var(--sage);outline-offset:2px}
+
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.twocol label{font-size:12px;margin-bottom:5px}
+@media(max-width:430px){.twocol{grid-template-columns:1fr}}
+
+.hintbox{
+  font-size:12.5px;color:var(--sage-deep);background:#F1F6F2;
+  border-radius:8px;padding:10px 12px;margin-top:10px;line-height:1.65;
+}
+.privacy{
+  font-size:11.5px;color:var(--muted);background:var(--mist);
+  border-radius:8px;padding:10px 12px;margin-top:10px;line-height:1.7;
+}
+
+.err{
+  display:none;font-size:13.5px;color:var(--warn);background:var(--warn-bg);
+  border:1px solid #E9C3C0;border-radius:8px;padding:11px 13px;margin-bottom:18px;
+}
+.err.on{display:block}
+
+button.go{
+  width:100%;font-family:inherit;font-size:16px;font-weight:500;letter-spacing:.06em;
+  padding:15px;border-radius:8px;border:0;background:var(--navy);color:var(--white);
+  cursor:pointer;margin-top:8px;
+}
+button.go:disabled{opacity:.55;cursor:default}
+.tip{font-size:11.5px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.7}
+
+.done{display:none;text-align:center;padding:44px 12px}
+.done.on{display:block}
+.done .mark{
+  width:54px;height:54px;border-radius:50%;background:#F1F6F2;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+}
+.done h2{font-family:var(--serif);font-size:21px;font-weight:600;margin:0 0 10px}
+.done p{font-size:14px;color:var(--muted);margin:0 0 6px;line-height:1.85}
+.done .back{display:inline-block;margin-top:22px;font-size:13.5px;color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <a href="/"><img src="logo.webp" alt="貝森國際商務中心"></a>
+  </header>
+
+  <div id="formView">
+    <h1>需求登記</h1>
+    <p class="lede">約 30 秒，我們會盡快為您配對合適方案</p>
+
+    <div class="err" id="err"></div>
+
+    <div class="fld">
+      <label for="name">稱呼<span class="req">*</span></label>
+      <input id="name" placeholder="王先生 / 陳小姐" autocomplete="name">
+    </div>
+
+    <div class="fld">
+      <label>聯絡方式<span class="req">*</span></label>
+      <div class="twocol">
+        <div>
+          <label for="phone">手機<span class="req">*</span></label>
+          <input id="phone" placeholder="0912-345-678" inputmode="tel" autocomplete="tel">
+        </div>
+        <div>
+          <label for="email">Email<span class="req">*</span></label>
+          <input id="email" placeholder="name@company.com" inputmode="email" autocomplete="email">
+        </div>
+      </div>
+      <div id="lineHint"></div>
+      <div class="privacy">報價單會寄到您的 Email，有問題我們會用電話與您確認。資料僅用於回覆本次辦公室、登記或參訪需求；<b>不另作第三方分享</b>。</div>
+    </div>
+
+    <div class="fld">
+      <label>需求項目<span class="req">*</span><span class="opt">可複選</span></label>
+      <div class="chips" id="needChips"></div>
+    </div>
+
+    <div class="fld" id="peopleBlock" hidden>
+      <label>使用人數<span class="req">*</span></label>
+      <div class="chips" id="peopleChips"></div>
+    </div>
+
+    <div class="fld">
+      <label>目前狀態<span class="req">*</span></label>
+      <div class="chips" id="stageChips"></div>
+    </div>
+
+    <div class="fld">
+      <label>預計進駐<span class="req">*</span></label>
+      <div class="chips" id="timingChips"></div>
+    </div>
+
+    <div class="fld">
+      <label for="company">公司名稱<span class="opt">選填</span></label>
+      <input id="company" placeholder="○○有限公司" autocomplete="organization">
+    </div>
+
+    <div class="fld" id="taxBlock" hidden>
+      <label for="taxId">統一編號<span class="opt">選填</span></label>
+      <input id="taxId" placeholder="12345678" inputmode="numeric">
+    </div>
+
+    <div class="fld">
+      <label for="industry">產業<span class="opt">選填</span></label>
+      <select id="industry"></select>
+    </div>
+
+    <div class="fld">
+      <label for="note">想補充的事<span class="opt">選填</span></label>
+      <textarea id="note" placeholder="例：希望有窗、需要停車位、預計三人使用…"></textarea>
+    </div>
+
+    <button type="button" class="go" id="go">送　出</button>
+    <div class="tip" id="tip">送出後專人會盡快與您聯繫</div>
+  </div>
+
+  <div class="done" id="doneView">
+    <div class="mark">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4F7460" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h2>已收到您的需求</h2>
+    <p id="doneMsg">專人會在服務時間內與您聯繫，為您說明合適的方案。</p>
+    <p id="doneSub">服務時間｜平日 09:00–18:00　電話 03-6561163</p>
+    <a class="back" href="/">← 回貝森官網</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbxd9rt_rzQCUVjgzDDRlva3gEBzk3keELksy87RBbZgXvq5Xf9nNwpXDWLt4fzwi4iLqA/exec';
+
+  var NEEDS   = ['實體辦公室','工商登記','會議室','其他'];
+  var PEOPLE  = ['1 人獨立','2 人','3–4 人','5 人以上','不確定．請協助建議'];
+  var STAGE   = ['新設立公司','已設立要遷址','籌備中','只是先了解'];
+  var TIMING  = ['立即','1 個月內','2–3 個月','還在評估'];
+  var INDUSTRY= ['','工程／營造','設計','顧問','軟體／資訊','貿易','電商／零售','個人工作室','其他'];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var q = new URLSearchParams(location.search);
+
+  // ch 決定表單行為，src 只記錄來源 —— 兩件事不要混在同一個參數
+  var CH  = ['line','web','onsite'].indexOf(q.get('ch')) >= 0 ? q.get('ch')
+          : (q.get('uid') ? 'line' : 'web');
+  var SRC = q.get('src') || (q.get('utm_campaign') ? 'ads_' + q.get('utm_campaign') : '');
+  var UID = q.get('uid') || '';
+
+  var f = { needs:[], people:'', stage:'', timing:'' };
+
+  function chips(host, list, get, set){
+    host.innerHTML = list.map(function(x){
+      return '<button type="button" data-v="'+x+'" aria-pressed="'+get(x)+'">'+x+'</button>';
+    }).join('');
+    Array.prototype.forEach.call(host.querySelectorAll('button'), function(b){
+      b.onclick = function(){ set(b.dataset.v); render(); };
+    });
+  }
+  function needsOffice(){ return f.needs.indexOf('實體辦公室') >= 0; }
+
+  function render(){
+    chips($('needChips'), NEEDS,
+      function(v){ return f.needs.indexOf(v) >= 0; },
+      function(v){
+        var i = f.needs.indexOf(v);
+        if (i >= 0) f.needs.splice(i,1); else f.needs.push(v);
+        if (!needsOffice()) f.people = '';
+      });
+    $('peopleBlock').hidden = !needsOffice();
+    if (needsOffice()) chips($('peopleChips'), PEOPLE, function(v){return f.people===v;}, function(v){f.people=v;});
+    chips($('stageChips'),  STAGE,  function(v){return f.stage===v;},  function(v){f.stage=v;});
+    chips($('timingChips'), TIMING, function(v){return f.timing===v;}, function(v){f.timing=v;});
+  }
+
+  $('industry').innerHTML = INDUSTRY.map(function(x){
+    return '<option value="'+x+'">'+(x || '請選擇')+'</option>'; }).join('');
+
+  // 從 LINE 進來的人已經是好友了，不會再叫他加一次
+  if (CH === 'line') {
+    $('lineHint').innerHTML = '<div class="hintbox">我們會直接在<b>這個 LINE 對話</b>回覆您。</div>';
+  }
+  if (CH === 'onsite') {
+    $('taxBlock').hidden = false;
+    $('tip').textContent = '由櫃檯人員協助填寫';
+  }
+  render();
+
+  function fail(msg){
+    var e = $('err');
+    e.textContent = msg; e.className = 'err on';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  $('go').onclick = function(){
+    var btn = this;
+    var name  = $('name').value.trim();
+    var phone = $('phone').value.trim();
+    var email = $('email').value.trim();
+
+    $('err').className = 'err';
+    if (!name)  return fail('請填寫稱呼。');
+    if (!phone) return fail('請填寫手機，方便我們與您確認。');
+    if (!email) return fail('請填寫 Email，報價單會寄到這裡。');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Email 格式不正確，請確認。');
+    if (!f.needs.length) return fail('請選擇需求項目。');
+    if (needsOffice() && !f.people) return fail('請選擇使用人數。');
+    if (!f.stage)  return fail('請選擇目前狀態。');
+    if (!f.timing) return fail('請選擇預計進駐時間。');
+
+    var payload = {
+      formType: 'lead',
+      entrySrc: CH, srcRaw: SRC, lineUserId: UID,
+      utmSource: q.get('utm_source') || '', utmMedium: q.get('utm_medium') || '',
+      utmCampaign: q.get('utm_campaign') || '',
+      name: name, phone: phone, email: email,
+      contactChannel: CH === 'line' ? 'line' : '',
+      needs: f.needs, people: f.people, stage: f.stage, timing: f.timing,
+      company: $('company').value.trim(),
+      industry: $('industry').value,
+      taxId: $('taxId') ? $('taxId').value.trim() : '',
+      note: $('note').value.trim()
+    };
+
+    btn.disabled = true; btn.textContent = '送出中…';
+
+    // 等伺服器真的回應再說成功。送失敗還顯示成功、又把表單清掉，
+    // 客人以為填好了、資料也沒了，而且不會有人知道。
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (!j || !j.success) throw new Error((j && j.error) || '伺服器沒有確認收到');
+      $('formView').style.display = 'none';
+      $('doneView').className = 'done on';
+      if (j.merged) $('doneMsg').textContent = '我們找到您先前留過的資料，已一併整理，不需要重填。';
+      window.scrollTo({ top:0 });
+    })
+    .catch(function(err){
+      btn.disabled = false; btn.textContent = '送　出';
+      fail((err && err.message ? err.message : '送出失敗') + '　您填的資料還在，可以再按一次，或直接來電 03-6561163。');
+    });
+  };
+})();
+</script>
+</body>
+</html>
