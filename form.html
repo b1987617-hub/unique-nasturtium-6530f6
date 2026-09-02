@@ -260,7 +260,9 @@ button.go:disabled{opacity:.55;cursor:default}
 
   function fail(msg){
     var e = $('err');
-    e.textContent = msg; e.className = 'err on';
+    // 用 innerHTML，電話才會是可點的連結（手機上很重要）。
+    // msg 一律由我們自己組，不夾帶使用者輸入，沒有注入問題。
+    e.innerHTML = msg; e.className = 'err on';
     window.scrollTo({ top:0, behavior:'smooth' });
   }
 
@@ -313,7 +315,11 @@ button.go:disabled{opacity:.55;cursor:default}
     })
     .catch(function(err){
       btn.disabled = false; btn.textContent = '送　出';
-      fail((err && err.message ? err.message : '送出失敗') + '　您填的資料還在，可以再按一次，或直接來電 03-6561163。');
+      // 網路層的錯誤是英文技術字串（例如 Failed to fetch），對客人沒有意義。
+      // 只有伺服器回的中文訊息才顯示，其餘一律講「送出失敗」。
+      var m = (err && err.message) ? String(err.message) : '';
+      var zh = /[一-鿿]/.test(m) ? m : '送出失敗';
+      fail(zh + '，您填的資料還在。請再按一次送出，或直接來電 ' + '<a href="tel:0365611163">03-6561163</a>。');
     });
   };
 })();
