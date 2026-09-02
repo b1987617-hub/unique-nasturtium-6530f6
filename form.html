@@ -124,8 +124,8 @@ button.go:disabled{opacity:.55;cursor:default}
       <label>聯絡方式<span class="req">*</span></label>
       <div class="twocol">
         <div>
-          <label for="phone">手機<span class="req">*</span></label>
-          <input id="phone" placeholder="0912-345-678" inputmode="tel" autocomplete="tel">
+          <label for="phone">聯絡電話<span class="req">*</span></label>
+          <input id="phone" placeholder="0912-345-678 或 03-6561163" inputmode="tel" autocomplete="tel">
         </div>
         <div>
           <label for="email">Email<span class="req">*</span></label>
@@ -274,7 +274,7 @@ button.go:disabled{opacity:.55;cursor:default}
 
     $('err').className = 'err';
     if (!name)  return fail('請填寫稱呼。');
-    if (!phone) return fail('請填寫手機，方便我們與您確認。');
+    if (!phone) return fail('請填寫聯絡電話，方便我們與您確認。');
     if (!email) return fail('請填寫 Email，報價單會寄到這裡。');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Email 格式不正確，請確認。');
     if (!f.needs.length) return fail('請選擇需求項目。');
