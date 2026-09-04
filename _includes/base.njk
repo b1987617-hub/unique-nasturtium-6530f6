@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.ga4 }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ site.ga4 }}');
+</script>
+<title>{{ metaTitle or title }}</title>
+<meta name="description" content="{{ description }}">
+<meta name="geo.region" content="TW-HSQ">
+<meta name="geo.placename" content="新竹縣竹北市">
+<meta name="author" content="{{ site.name }} {{ site.nameEn }}">
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:type" content="{{ ogType or 'website' }}">
+<meta property="og:site_name" content="{{ site.name }} {{ site.nameEn }}">
+<meta property="og:title" content="{{ metaTitle or title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:image" content="{{ site.url }}/{{ cover or 'space-1.webp' }}">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#20384A; --navy:#34526E; --steel:#5C7D97;
+    --sage:#6E9B7E; --sage-deep:#4F7460;
+    --paper:#FAFBFC; --mist:#EEF2F4; --line:#DBE2E7;
+    --muted:#6B7C88; --white:#FFFFFF;
+    --serif:"Noto Serif TC",Georgia,"Songti TC",serif;
+    --sans:"Noto Sans TC",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.9;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block;height:auto}
+
+  header{position:sticky;top:0;z-index:60;background:rgba(250,251,252,.94);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px}
+  .logo img{width:auto;height:48px}
+  .menu{display:flex;align-items:center;gap:28px;font-size:.9rem}
+  .menu a{color:var(--ink);transition:color .2s}
+  .menu a:hover{color:var(--sage-deep)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;
+    padding:13px 30px;border-radius:2px;font-size:.9rem;font-weight:500;
+    letter-spacing:.04em;transition:.25s;border:1px solid transparent;cursor:pointer}
+  .btn-solid{background:var(--navy);color:#fff}
+  .btn-solid:hover{background:var(--ink)}
+  .btn-ghost{border-color:var(--line);color:var(--ink);background:#fff}
+  .btn-ghost:hover{border-color:var(--navy)}
+  .btn-line{background:#06C755;color:#fff}
+  .btn-line:hover{filter:brightness(.93)}
+  .nav-cta{padding:11px 24px}
+  .burger{display:none;background:none;border:0;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+  .burger span{width:24px;height:2px;background:var(--ink);display:block}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:.72rem;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--navy);font-weight:500;margin-bottom:20px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--sage);
+    transform:skewX(-30deg);transform-origin:left}
+
+  .crumb{font-size:.8rem;color:var(--muted);padding:26px 0 0}
+  .crumb a:hover{color:var(--sage-deep)}
+  .crumb i{font-style:normal;margin:0 8px;opacity:.5}
+
+  footer{background:var(--ink);color:#C9D4DC;padding:64px 0 30px;margin-top:96px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr;gap:44px;padding-bottom:36px;
+    border-bottom:1px solid rgba(255,255,255,.12)}
+  .foot-brand .mk{font-family:var(--serif);font-size:1.35rem;letter-spacing:.12em;color:#fff}
+  .foot-brand .mk .o{color:var(--sage)}
+  .foot-brand .sub{font-size:.86rem;margin-top:6px;opacity:.75}
+  .foot-col h4{font-size:.82rem;letter-spacing:.18em;color:#fff;font-weight:500;margin-bottom:16px}
+  .foot-col p{font-size:.86rem;margin-bottom:9px;opacity:.8;line-height:1.7}
+  .foot-col a:hover{color:var(--sage)}
+  .foot-bottom{display:flex;justify-content:space-between;gap:16px;padding-top:24px;
+    font-size:.78rem;opacity:.6;flex-wrap:wrap}
+
+  .float-line{position:fixed;right:22px;bottom:22px;z-index:80;width:56px;height:56px;
+    border-radius:50%;background:#06C755;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.22)}
+  .float-line svg{width:30px;height:30px;fill:#fff}
+
+  @media(max-width:860px){
+    .menu{position:fixed;inset:76px 0 auto 0;background:var(--paper);flex-direction:column;
+      align-items:flex-start;gap:0;padding:12px 28px 26px;border-bottom:1px solid var(--line);
+      display:none}
+    .menu.open{display:flex}
+    .menu a{padding:13px 0;width:100%;border-bottom:1px solid var(--line)}
+    .menu .nav-cta{margin-top:14px;width:100%;border-bottom:0}
+    .burger{display:flex}
+    .foot-grid{grid-template-columns:1fr;gap:30px}
+  }
+
+  /* ───────── 文章頁 ───────── */
+  .art{max-width:760px;margin:0 auto;padding:0 28px}
+  .art-head{padding:34px 0 8px}
+  .art-head h1{font-family:var(--serif);font-size:2.15rem;line-height:1.45;
+    font-weight:600;color:var(--ink);letter-spacing:.01em}
+  .art-meta{font-size:.8rem;color:var(--muted);margin-top:18px;
+    display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .art-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--line)}
+  .lede{font-size:1.05rem;color:var(--steel);margin-top:22px;padding-left:18px;
+    border-left:2px solid var(--sage);line-height:1.95}
+  .art-cover{margin:34px 0 0;border-radius:2px;overflow:hidden}
+
+  .toc{background:var(--mist);border:1px solid var(--line);border-radius:2px;
+    padding:24px 28px;margin:38px 0 8px}
+  .toc h2{font-size:.78rem;letter-spacing:.2em;color:var(--navy);font-weight:500;
+    margin-bottom:14px;font-family:var(--sans)}
+  .toc ol{margin:0;padding-left:20px}
+  .toc li{font-size:.9rem;margin-bottom:9px;line-height:1.6}
+  .toc a:hover{color:var(--sage-deep);text-decoration:underline}
+
+  .body{font-size:1rem;color:#2C4354}
+  .body h2{font-family:var(--serif);font-size:1.5rem;line-height:1.5;font-weight:600;
+    color:var(--ink);margin:56px 0 6px;padding-top:10px;scroll-margin-top:96px}
+  .body h2::before{content:"";display:block;width:30px;height:2px;background:var(--sage);
+    transform:skewX(-30deg);margin-bottom:16px}
+  .body h3{font-size:1.08rem;font-weight:500;color:var(--navy);margin:34px 0 4px;scroll-margin-top:96px}
+  .body p{margin:16px 0}
+  .body ul,.body ol{margin:16px 0;padding-left:22px}
+  .body li{margin-bottom:8px}
+  .body strong{font-weight:500;color:var(--ink)}
+  .body a{color:var(--sage-deep);text-decoration:underline;text-underline-offset:3px}
+  .body blockquote{margin:26px 0;padding:18px 24px;background:var(--mist);
+    border-left:3px solid var(--navy);font-size:.95rem}
+  .body blockquote p{margin:6px 0}
+  .body img{margin:30px 0;border-radius:2px}
+  .body hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+  .tw{overflow-x:auto;margin:26px 0;-webkit-overflow-scrolling:touch}
+  .body table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:480px;background:#fff}
+  .body th,.body td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}
+  .body th{background:var(--mist);font-weight:500;color:var(--ink);white-space:nowrap}
+
+  .answer{background:#fff;border:1px solid var(--line);border-left:3px solid var(--sage);
+    padding:18px 22px;margin:18px 0;font-size:1rem;color:var(--ink)}
+
+  .faq{margin-top:60px;border-top:1px solid var(--line);padding-top:10px}
+  .faq details{border-bottom:1px solid var(--line);padding:4px 0}
+  .faq summary{cursor:pointer;padding:18px 0;font-weight:500;color:var(--ink);
+    font-size:1rem;list-style:none;display:flex;justify-content:space-between;gap:18px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";color:var(--sage-deep);font-weight:400;flex:none}
+  .faq details[open] summary::after{content:"−"}
+  .faq .a{padding:0 0 20px;color:#3A5568;font-size:.95rem}
+
+  .cta{margin-top:64px;background:var(--ink);color:#fff;border-radius:2px;padding:46px 44px}
+  .cta h2{font-family:var(--serif);font-size:1.5rem;font-weight:600;line-height:1.6;color:#fff}
+  .cta p{margin:16px 0 26px;color:#C9D4DC;font-size:.95rem}
+  .cta .acts{display:flex;gap:14px;flex-wrap:wrap}
+
+  .more{margin-top:62px;border-top:1px solid var(--line);padding-top:36px}
+  .more h2{font-size:.78rem;letter-spacing:.2em;color:var(--navy);font-weight:500;margin-bottom:20px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:2px;padding:26px;
+    transition:.25s;display:block}
+  .card:hover{border-color:var(--navy);transform:translateY(-2px)}
+  .card .k{font-size:.7rem;letter-spacing:.18em;color:var(--sage-deep);font-weight:500}
+  .card h3{font-family:var(--serif);font-size:1.12rem;line-height:1.55;font-weight:600;
+    margin:12px 0 10px;color:var(--ink)}
+  .card p{font-size:.86rem;color:var(--muted);line-height:1.7}
+  .card .d{font-size:.74rem;color:var(--muted);margin-top:14px;opacity:.8}
+
+  .list-head{padding:56px 0 10px;border-bottom:1px solid var(--line);margin-bottom:40px}
+  .list-head h1{font-family:var(--serif);font-size:2.1rem;font-weight:600;line-height:1.5}
+  .list-head p{color:var(--steel);margin:16px 0 34px;max-width:620px}
+  .empty{color:var(--muted);padding:40px 0}
+
+  @media(max-width:860px){
+    .art-head h1{font-size:1.62rem}
+    .body h2{font-size:1.28rem;margin-top:44px}
+    .cta{padding:34px 26px}
+    .cta .acts .btn{width:100%}
+    .list-head h1{font-size:1.62rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="/" class="logo"><img src="/logo.webp" alt="{{ site.name }} {{ site.nameEn }}｜竹北辦公室" width="560" height="168"></a>
+    <nav class="menu" id="menu">
+      <a href="/#about">關於貝森</a>
+      <a href="/#services">服務項目</a>
+      <a href="/blog/">知識文章</a>
+      <a href="/#space">空間環境</a>
+      <a href="/#contact">聯絡我們</a>
+      <a href="/#booking" class="btn btn-solid nav-cta">預約參觀</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="選單"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+{{ content | safe }}
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="mk">BASE<span class="o">O</span>N SPACE</div>
+        <div class="sub">{{ site.name }}</div>
+      </div>
+      <div class="foot-col">
+        <h4>服務項目</h4>
+        <p><a href="/#services">竹北辦公室</a></p>
+        <p><a href="/#services">竹北共享辦公室</a></p>
+        <p><a href="/#services">竹北會議室</a></p>
+        <p><a href="/#services">公司設立・工商登記</a></p>
+        <p><a href="/blog/">知識文章</a></p>
+      </div>
+      <div class="foot-col">
+        <h4>聯絡資訊</h4>
+        <p>{{ site.addr.full }}</p>
+        <p><a href="tel:036561163">{{ site.tel }}</a></p>
+        <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+        <p>{{ site.hoursText }}</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 {{ site.name }} {{ site.nameEn }}. All rights reserved.</span>
+      <span>{{ site.tagline }}</span>
+    </div>
+  </div>
+</footer>
+
+<a href="{{ site.line }}" target="_blank" rel="noopener" class="float-line" aria-label="加入官方 LINE">
+  <svg viewBox="0 0 24 24"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.7 7.2 8.7 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1 1c0 .3-.2 1.1 1 .6 1.2-.5 6.3-3.7 8.6-6.4C22.3 14.7 22 12.9 22 11c0-4.4-4.5-8-10-8z"/></svg>
+</a>
+
+<script>
+  var b=document.getElementById('burger'),m=document.getElementById('menu');
+  if(b&&m){b.addEventListener('click',function(){m.classList.toggle('open');});}
+</script>
+</body>
+</html>
