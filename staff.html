@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>員工入口｜貝森國際商務中心</title>
+<style>
+:root{
+  --ground:#FAF8F4; --surface:#FFFFFF; --line:#E2DCCF; --line-strong:#CFC6B2;
+  --ink:#1F1C17; --ink-2:#4A443A; --muted:#7A7266;
+  --accent:#1E5158; --accent-deep:#143C42; --accent-wash:#E8EFEB;
+  --warn:#B3261E; --warn-wash:#FBEAE8;
+  --ok:#2D6A4F; --ok-wash:#E6F0EA;
+  --radius:8px;
+  --sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Consolas",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.65;
+     min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px}
+.card{width:100%;max-width:470px;background:var(--surface);border:1px solid var(--line);
+      border-radius:12px;padding:42px 40px 32px;box-shadow:0 2px 16px rgba(31,28,23,.05)}
+.logo{max-width:210px;height:auto;display:block;margin:0 auto}
+h1{margin-top:24px;font-size:24px;font-weight:700;text-align:center;letter-spacing:.01em}
+.lead{margin-top:9px;font-size:14px;color:var(--muted);text-align:center;line-height:1.75}
+hr{border:0;border-top:1px solid var(--line);margin:26px 0 22px}
+
+.gbtn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
+      padding:13px 18px;border:1px solid var(--line-strong);border-radius:var(--radius);
+      background:var(--surface);color:var(--ink);font:inherit;font-size:15px;font-weight:600;
+      cursor:pointer;text-decoration:none;transition:border-color .12s,box-shadow .12s}
+.gbtn:hover{border-color:var(--accent);box-shadow:0 1px 6px rgba(31,28,23,.07)}
+.gbtn svg{width:19px;height:19px;flex:none}
+
+.hint{margin-top:15px;padding:13px 16px;background:var(--accent-wash);
+      border-radius:var(--radius);font-size:13px;color:var(--accent-deep);line-height:1.8}
+.hint b{font-weight:700}
+
+details{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--accent);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"＋ ";}
+details[open] summary::before{content:"− ";}
+.form{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.form label{font-size:12px;color:var(--muted);margin-bottom:-4px}
+.form input,.form textarea{font:inherit;font-size:14px;padding:9px 11px;
+  border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--ink);width:100%}
+.form button{font:inherit;font-size:15px;font-weight:600;padding:11px 18px;border-radius:var(--radius);
+  border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.form button:disabled{opacity:.6;cursor:default}
+.msg{font-size:13px;line-height:1.7;padding:11px 14px;border-radius:var(--radius)}
+.msg.ok{background:var(--ok-wash);color:var(--ok)}
+.msg.bad{background:var(--warn-wash);color:var(--warn)}
+
+.rows{margin-top:20px;font-size:13px;color:var(--muted);line-height:1.9}
+.rows .k{color:var(--ink-2);font-weight:600}
+.foot{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);
+      font-size:12px;color:var(--muted);text-align:center;line-height:1.9}
+.foot a{color:var(--accent);text-decoration:none}
+</style></head>
+<body>
+<div class="card">
+  <img class="logo" src="/logo.webp" alt="貝森國際商務中心">
+
+  <h1>員工入口</h1>
+  <div class="lead">報價、客戶追蹤、審核與報表<br>都從這裡進去</div>
+
+  <hr>
+
+  <a class="gbtn" id="loginBtn" href="#">
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.2 17.7 9.5 24 9.5z"/>
+      <path fill="#4285F4" d="M46.9 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.9c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7.2-10.2 7.2-17.6z"/>
+      <path fill="#FBBC05" d="M10.4 28.7a14.6 14.6 0 0 1 0-9.4l-7.8-6.1a24 24 0 0 0 0 21.6l7.8-6.1z"/>
+      <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.8-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.2 2.3-6.3 0-11.7-3.7-13.6-9.8l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/>
+    </svg>
+    用公司 Google 帳號登入
+  </a>
+
+  <div class="hint">
+    <b>請用公司配發的信箱登入。</b><br>
+    身分由 Google 驗證，我們不保管你的密碼。看得到哪些功能由你的職務決定。
+  </div>
+
+  <details id="reqBox">
+    <summary>第一次使用？申請開通帳號</summary>
+    <div class="form">
+      <label for="rqName">姓名</label>
+      <input id="rqName" placeholder="王小明" autocomplete="name" maxlength="40">
+      <label for="rqEmail">公司信箱</label>
+      <input id="rqEmail" type="email" placeholder="name@company.com" autocomplete="email" maxlength="120">
+      <label for="rqNote">職務（選填，方便管理者判斷要給哪些權限）</label>
+      <textarea id="rqNote" rows="2" placeholder="例：業務承辦／帳務" maxlength="200"></textarea>
+      <button type="button" id="rqSend">送出申請</button>
+      <div class="msg" id="rqMsg" hidden></div>
+    </div>
+  </details>
+
+  <div class="rows">
+    <span class="k">送出申請之後？</span>　管理者開通後你就能登入，不需要再做任何事。<br>
+    <span class="k">登入後看到的東西跟同事不一樣？</span>　那是正常的，畫面依職務顯示。<br>
+    <span class="k">開不起來？</span>　多半是瀏覽器停在別的 Google 帳號，切換後重開即可。
+  </div>
+
+  <div class="foot">
+    貝森國際商務中心・新竹縣竹北市博愛街 513 號 2 樓<br>
+    系統問題請聯繫 <a href="mailto:baseonbc@baseon.com.tw">baseonbc@baseon.com.tw</a>
+  </div>
+</div>
+
+<script>
+// 內部系統（大門）。同仁按登入就直接過去，Google 沒登入的話會先跳登入頁。
+var WORKSTATION = "https://script.google.com/macros/s/AKfycbyGUZ3cRk1ufA-YijizYy-Rf1ZHGCveEeY30DOqXG8AwLC1GGgQI4OAAGpBUXI0UQNHbA/exec";
+// 帳號申請走側門（對外開放的那個部署）—— 申請的人還沒有帳號，走大門會被擋。
+var PUBLIC_API = "https://script.google.com/macros/s/AKfycbxd9rt_rzQCUVjgzDDRlva3gEBzk3keELksy87RBbZgXvq5Xf9nNwpXDWLt4fzwi4iLqA/exec";
+
+document.getElementById("loginBtn").href = WORKSTATION;
+
+var btn = document.getElementById("rqSend");
+var msgEl = document.getElementById("rqMsg");
+
+function show(kind, text){
+  msgEl.hidden = false;
+  msgEl.className = "msg " + kind;
+  msgEl.textContent = text;
+}
+
+btn.onclick = function(){
+  var name = document.getElementById("rqName").value.trim();
+  var email = document.getElementById("rqEmail").value.trim();
+  var note = document.getElementById("rqNote").value.trim();
+
+  if (!name) { show("bad", "請填寫姓名。"); return; }
+  if (!email || email.indexOf("@") < 1) { show("bad", "請填寫正確的公司信箱。"); return; }
+
+  btn.disabled = true;
+  show("ok", "送出中…");
+
+  // 用 text/plain 是刻意的：這樣瀏覽器不會發預檢請求，
+  // Apps Script 也就不需要處理 CORS 的 preflight。
+  fetch(PUBLIC_API, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=UTF-8" },
+    body: JSON.stringify({ formType: "access_request", name: name, email: email, note: note })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    btn.disabled = false;
+    if (d && d.success) {
+      show("ok", d.message || "已送出申請，管理者開通後你就能登入。");
+      document.getElementById("rqName").value = "";
+      document.getElementById("rqEmail").value = "";
+      document.getElementById("rqNote").value = "";
+    } else {
+      show("bad", (d && d.error) ? d.error : "送不出去，請稍後再試，或直接聯繫管理者。");
+    }
+  })
+  .catch(function(){
+    btn.disabled = false;
+    // 送不出去時不要清空欄位 —— 要人重打一次等於放棄這次申請。
+    show("bad", "送不出去，請確認網路後再按一次；或直接寫信給 baseonbc@baseon.com.tw。");
+  });
+};
+</script>
+</body></html>

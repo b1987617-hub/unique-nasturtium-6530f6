@@ -3,3 +3,4 @@ Allow: /
 Disallow: /tools/
 Disallow: /admin/
 Sitemap: https://baseon.com.tw/sitemap.xml
+Disallow: /staff
