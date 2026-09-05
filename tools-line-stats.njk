@@ -1,0 +1,422 @@
+---
+permalink: /tools/line-stats/index.html
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>加好友來源成效｜貝森</title>
+<link rel="icon" href="/logo.png">
+<style>
+  :root{
+    --ink:#20384A; --navy:#34526E; --steel:#5C7D97;
+    --sage:#6E9B7E; --sage-deep:#4F7460;
+    --paper:#F6F8F9; --mist:#EEF2F4; --line:#DBE2E7;
+    --muted:#6B7C88;
+    --sans:"Noto Sans TC",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);
+    line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  header{background:var(--ink);color:#fff;padding:18px 0}
+  .hd{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .mk{font-size:1.02rem;letter-spacing:.1em;font-weight:500}
+  .mk .o{color:var(--sage)}
+  .sub{font-size:.76rem;opacity:.65;letter-spacing:.05em;margin-top:2px}
+  .who{font-size:.76rem;opacity:.8;display:flex;align-items:center;gap:12px}
+  .who button{background:none;border:1px solid rgba(255,255,255,.3);color:#fff;
+    padding:5px 12px;border-radius:2px;cursor:pointer;font-size:.72rem;font-family:inherit}
+  .who button:hover{background:rgba(255,255,255,.1)}
+
+  .gate{max-width:520px;margin:14vh auto;background:#fff;border:1px solid var(--line);
+    border-radius:3px;padding:44px 40px;text-align:center}
+  .gate h1{font-size:1.2rem;font-weight:500;margin-bottom:10px}
+  .gate p{color:var(--muted);font-size:.86rem;margin-bottom:28px}
+  #gbtn{display:flex;justify-content:center}
+  .setup{text-align:left;background:var(--mist);border-left:3px solid #C8102E;
+    padding:18px 20px;font-size:.82rem;line-height:1.9;margin-top:8px}
+  .setup code{background:#fff;padding:1px 6px;border:1px solid var(--line);
+    font-size:.78rem;word-break:break-all}
+  .err{background:#FEF2F2;border-left:3px solid #C8102E;padding:14px 18px;
+    font-size:.84rem;margin:18px 0;text-align:left;color:#7A1420}
+
+  .bar{background:#fff;border-bottom:1px solid var(--line);padding:14px 0;
+    position:sticky;top:0;z-index:20}
+  .ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .seg{display:flex;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:#fff}
+  .seg button{border:0;background:#fff;padding:8px 15px;cursor:pointer;font-size:.82rem;
+    font-family:inherit;color:var(--steel);border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--navy);color:#fff}
+  input[type=date]{border:1px solid var(--line);border-radius:2px;padding:7px 10px;
+    font-family:inherit;font-size:.82rem;color:var(--ink);background:#fff}
+  .spacer{flex:1}
+  .stamp{font-size:.72rem;color:var(--muted)}
+
+  main{padding:26px 0 70px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:26px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:3px;padding:20px 22px}
+  .card .k{font-size:.72rem;letter-spacing:.12em;color:var(--muted)}
+  .card .v{font-size:1.9rem;font-weight:500;line-height:1.25;margin-top:6px;
+    font-variant-numeric:tabular-nums}
+  .card .n{font-size:.76rem;color:var(--muted);margin-top:4px}
+
+  section{background:#fff;border:1px solid var(--line);border-radius:3px;
+    padding:24px 26px;margin-bottom:20px}
+  section > h2{font-size:.76rem;letter-spacing:.18em;color:var(--navy);font-weight:500;
+    margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  section > h2::before{content:"";width:22px;height:2px;background:var(--sage);
+    transform:skewX(-30deg);flex:none}
+
+  .grp{margin-bottom:12px}
+  .grp-hd{display:flex;align-items:baseline;gap:10px;margin-bottom:5px}
+  .grp-hd .nm{font-weight:500}
+  .grp-hd .ct{font-variant-numeric:tabular-nums;font-weight:500}
+  .grp-hd .pc{font-size:.76rem;color:var(--muted)}
+  .track{height:7px;background:var(--mist);border-radius:4px;overflow:hidden}
+  .fill{height:100%;background:var(--navy);border-radius:4px}
+
+  .tw{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:680px}
+  th,td{border-bottom:1px solid var(--line);padding:11px 12px;text-align:left;vertical-align:top}
+  th{font-size:.72rem;letter-spacing:.08em;color:var(--muted);font-weight:500;
+    white-space:nowrap;border-bottom:1px solid var(--line)}
+  td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr:hover td{background:#FAFCFD}
+  .tag{display:inline-block;font-size:.68rem;padding:2px 8px;border-radius:2px;
+    background:var(--mist);color:var(--steel);white-space:nowrap}
+  .src{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.76rem;color:var(--steel)}
+  .lbl{font-weight:500}
+  .cp{border:1px solid var(--line);background:#fff;border-radius:2px;padding:4px 9px;
+    cursor:pointer;font-size:.7rem;font-family:inherit;color:var(--steel);white-space:nowrap}
+  .cp:hover{border-color:var(--navy);color:var(--navy)}
+  .cp.ok{background:var(--sage);border-color:var(--sage);color:#fff}
+
+  .spark{display:block}
+  .empty{color:var(--muted);padding:26px 0;text-align:center;font-size:.86rem}
+  .note{font-size:.78rem;color:var(--muted);margin-top:14px;line-height:1.85;
+    border-top:1px solid var(--line);padding-top:14px}
+  .hide{display:none!important}
+  @media(max-width:700px){
+    .card .v{font-size:1.5rem}
+    section{padding:18px 16px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ 登入畫面 ══ -->
+<div id="gate" class="gate">
+  <div style="font-size:1.05rem;letter-spacing:.1em;font-weight:500">BASE<span style="color:var(--sage)">O</span>N SPACE</div>
+  <div style="font-size:.74rem;color:var(--muted);letter-spacing:.14em;margin:4px 0 26px">加好友來源成效</div>
+  <h1>請先用 Google 登入</h1>
+  <p>只有名單內的帳號看得到資料。</p>
+  <div id="gbtn"></div>
+  <div id="gateErr" class="err hide"></div>
+  <div id="gateSetup" class="setup hide"></div>
+</div>
+
+<!-- ══ 儀表板 ══ -->
+<div id="app" class="hide">
+  <header>
+    <div class="wrap hd">
+      <div>
+        <div class="mk">BASE<span class="o">O</span>N SPACE</div>
+        <div class="sub">加好友來源成效</div>
+      </div>
+      <div class="who"><span id="me"></span><button id="out">登出</button></div>
+    </div>
+  </header>
+
+  <div class="bar">
+    <div class="wrap ctl">
+      <div class="seg" id="presets">
+        <button data-d="7">近 7 天</button>
+        <button data-d="30" class="on">近 30 天</button>
+        <button data-d="90">近 90 天</button>
+        <button data-d="0">全部</button>
+      </div>
+      <input type="date" id="from"> <span style="color:var(--muted)">至</span> <input type="date" id="to">
+      <div class="spacer"></div>
+      <span class="stamp" id="stamp"></span>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="cards" id="cards"></div>
+
+    <section>
+      <h2>每日點擊趨勢</h2>
+      <div id="trend"></div>
+    </section>
+
+    <section>
+      <h2>依分類</h2>
+      <div id="groups"></div>
+      <div class="note">
+        分類是從來源代號的前綴自動判斷的（<code>seo_</code>→SEO 文章、<code>ads_</code>→付費廣告…）。
+        用一個新前綴就自動多一個分類。要改顯示名稱或自訂分類，到 CRM 試算表的「<strong>加好友來源</strong>」分頁加一列即可。
+      </div>
+    </section>
+
+    <section>
+      <h2>每個來源</h2>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>分類</th><th>來源</th><th class="n">點擊</th><th class="n">佔比</th>
+            <th style="width:120px">趨勢</th><th>連結</th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="note">
+        <strong>點擊 ≠ 加好友。</strong>這裡記的是「有人點了連結」，他可能沒有真的加好友。
+        跟 LINE 後台的加好友人數一起看才準——點擊高但加好友低，代表那個入口吸引到的人意願不夠，或流程中斷了。
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// ── 設定 ────────────────────────────────────────────────
+var CLIENT_ID = {{ (site.lineStats.clientId or "") | dump | safe }};
+var API = {{ site.lineStats.api | dump | safe }};
+var PREFIX = {}, CATALOG = {}, DAILY = [], TOKEN = "";
+
+var $ = function (id) { return document.getElementById(id); };
+var fmt = function (n) { return Number(n).toLocaleString("zh-TW"); };
+
+// ── 登入 ────────────────────────────────────────────────
+function gsiReady() {
+  if (!CLIENT_ID) {
+    $("gbtn").classList.add("hide");
+    $("gateSetup").classList.remove("hide");
+    $("gateSetup").innerHTML =
+      "<strong>🔴 還沒設定 Google 登入</strong><br>" +
+      "1. 開 <code>console.cloud.google.com/apis/credentials</code><br>" +
+      "2. 建立憑證 → OAuth 用戶端 ID → 網頁應用程式<br>" +
+      "3. 「已授權的 JavaScript 來源」填 <code>https://baseon.com.tw</code><br>" +
+      "4. 把用戶端 ID 給 Claude 填進 <code>_data/site.js</code>，重新部署<br>" +
+      "<br>用戶端 ID 是公開值，會寫在網頁原始碼裡，不是密鑰。";
+    return;
+  }
+  google.accounts.id.initialize({ client_id: CLIENT_ID, callback: onCredential });
+  google.accounts.id.renderButton($("gbtn"), { theme: "outline", size: "large", locale: "zh_TW", width: 260 });
+}
+
+function onCredential(res) {
+  TOKEN = res.credential;
+  try { sessionStorage.setItem("bs_tok", TOKEN); } catch (e) {}
+  load();
+}
+
+function fail(msg) {
+  $("app").classList.add("hide");
+  $("gate").classList.remove("hide");
+  $("gateErr").classList.remove("hide");
+  $("gateErr").textContent = msg;
+}
+
+// ── 抓資料（只抓這一次，之後換區間都在本機算）──────────
+function load() {
+  $("gateErr").classList.add("hide");
+  fetch(API + "?view=linestats", {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ idToken: TOKEN })
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (d) {
+    if (!d.ok) {
+      if (d.error === "NOT_ALLOWED") return fail("這個帳號（" + (d.email || "") + "）不在儀表板名單裡。請用有權限的帳號登入。");
+      if (d.error === "NOT_SIGNED_IN" || d.error === "VERIFY_FAILED") return fail("登入驗證沒過，請重新登入一次。");
+      return fail("後端回報錯誤：" + d.error + (d.detail ? "（" + d.detail + "）" : ""));
+    }
+    PREFIX = d.prefixes || {};
+    CATALOG = {};
+    (d.catalog || []).forEach(function (c) { CATALOG[c.src] = c; });
+    DAILY = d.daily || [];
+    $("me").textContent = d.email;
+    $("stamp").textContent = "資料讀取於 " + new Date(d.generatedAt).toLocaleString("zh-TW");
+    $("gate").classList.add("hide");
+    $("app").classList.remove("hide");
+    setRange(30);
+  })
+  .catch(function (e) { fail("連不到後端：" + e.message); });
+}
+
+// ── 分類與名稱 ──────────────────────────────────────────
+function groupOf(src) {
+  var c = CATALOG[src];
+  if (c && c.group) return c.group;
+  var p = String(src).split("_")[0];
+  return PREFIX[p] || "其他";
+}
+function labelOf(src) {
+  var c = CATALOG[src];
+  if (c && c.label) return c.label;
+  return src;
+}
+
+// ── 時間區間 ────────────────────────────────────────────
+function iso(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function setRange(days) {
+  var to = new Date(), from;
+  if (days === 0) {
+    from = DAILY.length ? new Date(DAILY[0][0] + "T00:00:00") : new Date();
+  } else {
+    from = new Date(); from.setDate(from.getDate() - (days - 1));
+  }
+  $("from").value = iso(from);
+  $("to").value = iso(to);
+  render();
+}
+
+// ── 畫面 ────────────────────────────────────────────────
+function render() {
+  var f = $("from").value, t = $("to").value;
+  var rows = DAILY.filter(function (r) { return (!f || r[0] >= f) && (!t || r[0] <= t); });
+
+  var total = 0, bySrc = {}, byDay = {}, byGrp = {};
+  rows.forEach(function (r) {
+    total += r[2];
+    bySrc[r[1]] = (bySrc[r[1]] || 0) + r[2];
+    byDay[r[0]] = (byDay[r[0]] || 0) + r[2];
+    var g = groupOf(r[1]);
+    byGrp[g] = (byGrp[g] || 0) + r[2];
+  });
+
+  var srcs = Object.keys(bySrc).sort(function (a, b) { return bySrc[b] - bySrc[a]; });
+  var days = Math.max(1, Math.round((new Date(t) - new Date(f)) / 86400000) + 1);
+
+  // 摘要卡
+  $("cards").innerHTML = [
+    ["總點擊", fmt(total), days + " 天，平均每天 " + (total / days).toFixed(1)],
+    ["有點擊的來源", fmt(srcs.length), "共 " + Object.keys(byGrp).length + " 個分類"],
+    ["最高的來源", srcs.length ? fmt(bySrc[srcs[0]]) : "0", srcs.length ? labelOf(srcs[0]) : "還沒有資料"],
+    ["SEO 文章帶來", fmt(byGrp["SEO 文章"] || 0),
+      total ? "佔全部 " + Math.round((byGrp["SEO 文章"] || 0) / total * 100) + "%" : "—"]
+  ].map(function (c) {
+    return '<div class="card"><div class="k">' + c[0] + '</div><div class="v">' + c[1] + '</div><div class="n">' + c[2] + '</div></div>';
+  }).join("");
+
+  // 趨勢
+  $("trend").innerHTML = lineChart(byDay, f, t);
+
+  // 分類
+  var gs = Object.keys(byGrp).sort(function (a, b) { return byGrp[b] - byGrp[a]; });
+  $("groups").innerHTML = gs.length ? gs.map(function (g) {
+    var pc = total ? byGrp[g] / total * 100 : 0;
+    return '<div class="grp"><div class="grp-hd"><span class="nm">' + esc(g) + '</span>' +
+      '<span class="ct">' + fmt(byGrp[g]) + '</span>' +
+      '<span class="pc">' + pc.toFixed(1) + '%</span></div>' +
+      '<div class="track"><div class="fill" style="width:' + pc.toFixed(1) + '%"></div></div></div>';
+  }).join("") : '<div class="empty">這段期間還沒有點擊</div>';
+
+  // 每個來源
+  $("rows").innerHTML = srcs.length ? srcs.map(function (s) {
+    var url = "https://baseon.com.tw/line?src=" + s;
+    var pc = total ? (bySrc[s] / total * 100).toFixed(1) : "0.0";
+    var series = rows.filter(function (r) { return r[1] === s; })
+                     .reduce(function (m, r) { m[r[0]] = (m[r[0]] || 0) + r[2]; return m; }, {});
+    return "<tr>" +
+      '<td><span class="tag">' + esc(groupOf(s)) + "</span></td>" +
+      '<td><div class="lbl">' + esc(labelOf(s)) + '</div><div class="src">' + esc(s) + "</div></td>" +
+      '<td class="n">' + fmt(bySrc[s]) + "</td>" +
+      '<td class="n">' + pc + "%</td>" +
+      "<td>" + sparkline(series, f, t) + "</td>" +
+      '<td><button class="cp" data-u="' + esc(url) + '">複製連結</button></td>' +
+      "</tr>";
+  }).join("") : '<tr><td colspan="6" class="empty">這段期間還沒有點擊</td></tr>';
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+function dayList(f, t) {
+  var out = [], d = new Date(f + "T00:00:00"), end = new Date(t + "T00:00:00");
+  var guard = 0;
+  while (d <= end && guard++ < 800) { out.push(iso(d)); d.setDate(d.getDate() + 1); }
+  return out;
+}
+
+function lineChart(byDay, f, t) {
+  var ds = dayList(f, t);
+  if (!ds.length) return '<div class="empty">—</div>';
+  var vals = ds.map(function (d) { return byDay[d] || 0; });
+  var max = Math.max.apply(null, vals.concat([1]));
+  var W = 1000, H = 150, pad = 4;
+  var step = ds.length > 1 ? (W - pad * 2) / (ds.length - 1) : 0;
+  var pts = vals.map(function (v, i) {
+    return (pad + i * step).toFixed(1) + "," + (H - pad - (v / max) * (H - pad * 2 - 14)).toFixed(1);
+  });
+  var area = "M" + pts[0] + " L" + pts.join(" L") + " L" + (pad + (ds.length - 1) * step).toFixed(1) + "," + (H - pad) + " L" + pad + "," + (H - pad) + " Z";
+  return '<svg class="spark" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" style="width:100%;height:150px">' +
+    '<path d="' + area + '" fill="rgba(52,82,110,.09)"></path>' +
+    '<polyline points="' + pts.join(" ") + '" fill="none" stroke="#34526E" stroke-width="2" vector-effect="non-scaling-stroke"></polyline>' +
+    "</svg>" +
+    '<div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-top:6px">' +
+    "<span>" + ds[0] + "</span><span>最高 " + max + " 次／天</span><span>" + ds[ds.length - 1] + "</span></div>";
+}
+
+function sparkline(series, f, t) {
+  var ds = dayList(f, t);
+  var vals = ds.map(function (d) { return series[d] || 0; });
+  var max = Math.max.apply(null, vals.concat([1]));
+  var W = 120, H = 26;
+  var bw = W / Math.max(1, vals.length);
+  var bars = vals.map(function (v, i) {
+    var h = v ? Math.max(2, (v / max) * (H - 3)) : 0;
+    return h ? '<rect x="' + (i * bw).toFixed(2) + '" y="' + (H - h).toFixed(2) + '" width="' + Math.max(1, bw - .6).toFixed(2) + '" height="' + h.toFixed(2) + '" fill="#6E9B7E"></rect>' : "";
+  }).join("");
+  return '<svg viewBox="0 0 ' + W + " " + H + '" style="width:120px;height:26px">' + bars + "</svg>";
+}
+
+// ── 事件 ────────────────────────────────────────────────
+document.addEventListener("click", function (ev) {
+  var b = ev.target.closest(".cp");
+  if (b) {
+    navigator.clipboard.writeText(b.dataset.u).then(function () {
+      var o = b.textContent; b.textContent = "已複製"; b.classList.add("ok");
+      setTimeout(function () { b.textContent = o; b.classList.remove("ok"); }, 1400);
+    });
+    return;
+  }
+  var p = ev.target.closest("#presets button");
+  if (p) {
+    [].forEach.call(document.querySelectorAll("#presets button"), function (x) { x.classList.remove("on"); });
+    p.classList.add("on");
+    setRange(Number(p.dataset.d));
+  }
+});
+["from", "to"].forEach(function (id) {
+  document.addEventListener("change", function (e) { if (e.target.id === id) render(); });
+});
+document.addEventListener("click", function (e) {
+  if (e.target.id === "out") {
+    try { sessionStorage.removeItem("bs_tok"); } catch (x) {}
+    location.reload();
+  }
+});
+
+// 同一個分頁內重新整理不用再登入一次（token 只存在分頁的生命週期裡）
+try {
+  var saved = sessionStorage.getItem("bs_tok");
+  if (saved) { TOKEN = saved; load(); }
+} catch (e) {}
+</script>
+<script src="https://accounts.google.com/gsi/client" onload="gsiReady()" async defer></script>
+</body>
+</html>
