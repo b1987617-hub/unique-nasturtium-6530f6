@@ -171,6 +171,21 @@
   .card p{font-size:.86rem;color:var(--muted);line-height:1.7}
   .card .d{font-size:.74rem;color:var(--muted);margin-top:14px;opacity:.8}
 
+  .chips{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 30px}
+  .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);
+    background:#fff;border-radius:20px;padding:7px 16px;font-size:.84rem;transition:.2s}
+  .chip:hover{border-color:var(--navy);color:var(--navy)}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .chip em{font-style:normal;font-size:.72rem;opacity:.6}
+
+  .morecat{display:flex;align-items:center;gap:16px;margin-top:44px;background:var(--mist);
+    border:1px solid var(--line);border-radius:2px;padding:22px 26px;transition:.2s;flex-wrap:wrap}
+  .morecat:hover{border-color:var(--navy);background:#fff}
+  .morecat .k{font-size:.68rem;letter-spacing:.16em;color:var(--sage-deep);
+    border:1px solid var(--line);background:#fff;padding:4px 10px;border-radius:2px;flex:none}
+  .morecat .t{font-weight:500;color:var(--ink);flex:1}
+  .morecat .n{font-size:.8rem;color:var(--muted);white-space:nowrap}
+
   .list-head{padding:56px 0 10px;border-bottom:1px solid var(--line);margin-bottom:40px}
   .list-head h1{font-family:var(--serif);font-size:2.1rem;font-weight:600;line-height:1.5}
   .list-head p{color:var(--steel);margin:16px 0 34px;max-width:620px}

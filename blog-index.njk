@@ -20,6 +20,13 @@ description: 貝森國際商務中心整理工商登記、公司設立、登記�
     <p>工商登記、公司設立、登記地址、辦公空間怎麼挑——把新創與中小企業最常卡住的問題，用實務經驗一次講清楚。</p>
   </header>
 
+  <div class="chips">
+    <a href="/blog/" class="chip on">全部<em>{{ collections.posts.length }}</em></a>
+    {%- for c in collections.categories %}
+    <a href="/blog/c/{{ c.slug }}/" class="chip">{{ c.title }}<em>{{ c.count }}</em></a>
+    {%- endfor %}
+  </div>
+
   {%- if collections.posts.length %}
   <div class="cards">
     {%- for p in collections.posts %}

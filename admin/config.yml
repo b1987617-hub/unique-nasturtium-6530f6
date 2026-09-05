@@ -80,7 +80,7 @@ collections:
         name: "category"
         widget: "select"
         default: "工商登記"
-        options: ["工商登記", "公司設立", "辦公空間", "會議室", "經營知識"]
+        options: ["工商登記", "公司設立", "辦公空間", "會議室", "活動場地", "經營知識"]
 
       - label: "封面圖"
         name: "cover"

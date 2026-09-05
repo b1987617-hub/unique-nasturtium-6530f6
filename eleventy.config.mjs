@@ -85,6 +85,39 @@ export default function (eleventyConfig) {
     (posts || []).filter((p) => p.url !== url).slice(0, n || 3)
   );
 
+  // ── 分類 ──
+  // 只有「真的有文章」的分類才會產生頁面。空的分類頁對讀者沒用，
+  // 對 Google 來說還是「內容稀薄的列表頁」，會拖累整站。
+  eleventyConfig.addCollection("categories", async (api) => {
+    const meta = (await import("./_data/categories.js")).default;
+    const posts = api.getFilteredByGlob("blog/*.md")
+      .filter((p) => !p.data.draft)
+      .sort((a, b) => b.date - a.date);
+
+    const seen = new Map();
+    for (const p of posts) {
+      const name = p.data.category || "商務知識";
+      if (!seen.has(name)) seen.set(name, []);
+      seen.get(name).push(p);
+    }
+
+    return [...seen.entries()].map(([name, list]) => {
+      const m = meta[name] || {};
+      return {
+        name,
+        title: m.title || name,
+        slug: m.slug || encodeURIComponent(name),
+        intro: m.intro || "",
+        posts: list,
+        count: list.length
+      };
+    }).sort((a, b) => b.count - a.count);
+  });
+
+  eleventyConfig.addFilter("catOf", (cats, name) =>
+    (cats || []).find((c) => c.name === name) || null
+  );
+
   eleventyConfig.addCollection("posts", (api) =>
     api.getFilteredByGlob("blog/*.md")
        .filter((p) => !p.data.draft)

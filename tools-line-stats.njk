@@ -43,6 +43,9 @@ eleventyExcludeFromCollections: true
     padding:18px 20px;font-size:.82rem;line-height:1.9;margin-top:8px}
   .setup code{background:#fff;padding:1px 6px;border:1px solid var(--line);
     font-size:.78rem;word-break:break-all}
+  .gobtn{display:inline-block;background:var(--navy);color:#fff;padding:11px 26px;
+    border-radius:2px;font-size:.86rem;cursor:pointer}
+  .gobtn:hover{background:var(--ink)}
   .err{background:#FEF2F2;border-left:3px solid #C8102E;padding:14px 18px;
     font-size:.84rem;margin:18px 0;text-align:left;color:#7A1420}
 
@@ -111,15 +114,14 @@ eleventyExcludeFromCollections: true
 </head>
 <body>
 
-<!-- ══ 登入畫面 ══ -->
+<!-- ══ 進入畫面 ══ -->
 <div id="gate" class="gate">
   <div style="font-size:1.05rem;letter-spacing:.1em;font-weight:500">BASE<span style="color:var(--sage)">O</span>N SPACE</div>
   <div style="font-size:.74rem;color:var(--muted);letter-spacing:.14em;margin:4px 0 26px">加好友來源成效</div>
-  <h1>請先用 Google 登入</h1>
-  <p>只有名單內的帳號看得到資料。</p>
-  <div id="gbtn"></div>
+  <h1 id="gateTitle">請從工作站進入</h1>
+  <p id="gateMsg">這個頁面要從工作站點進來，才能確認你是誰。</p>
+  <a class="gobtn" id="goWs">前往工作站</a>
   <div id="gateErr" class="err hide"></div>
-  <div id="gateSetup" class="setup hide"></div>
 </div>
 
 <!-- ══ 儀表板 ══ -->
@@ -130,7 +132,7 @@ eleventyExcludeFromCollections: true
         <div class="mk">BASE<span class="o">O</span>N SPACE</div>
         <div class="sub">加好友來源成效</div>
       </div>
-      <div class="who"><span id="me"></span><button id="out">登出</button></div>
+      <div class="who"><span id="me"></span><button id="out">重新整理</button></div>
     </div>
   </header>
 
@@ -186,42 +188,36 @@ eleventyExcludeFromCollections: true
 
 <script>
 // ── 設定 ────────────────────────────────────────────────
-var CLIENT_ID = {{ (site.lineStats.clientId or "") | dump | safe }};
 var API = {{ site.lineStats.api | dump | safe }};
-var PREFIX = {}, CATALOG = {}, DAILY = [], TOKEN = "";
+var WORKSTATION = API + "?view=linestatsgo";
+var PREFIX = {}, CATALOG = {}, DAILY = [], TICKET = "";
 
 var $ = function (id) { return document.getElementById(id); };
 var fmt = function (n) { return Number(n).toLocaleString("zh-TW"); };
 
-// ── 登入 ────────────────────────────────────────────────
-function gsiReady() {
-  if (!CLIENT_ID) {
-    $("gbtn").classList.add("hide");
-    $("gateSetup").classList.remove("hide");
-    $("gateSetup").innerHTML =
-      "<strong>🔴 還沒設定 Google 登入</strong><br>" +
-      "1. 開 <code>console.cloud.google.com/apis/credentials</code><br>" +
-      "2. 建立憑證 → OAuth 用戶端 ID → 網頁應用程式<br>" +
-      "3. 「已授權的 JavaScript 來源」填 <code>https://baseon.com.tw</code><br>" +
-      "4. 把用戶端 ID 給 Claude 填進 <code>_data/site.js</code>，重新部署<br>" +
-      "<br>用戶端 ID 是公開值，會寫在網頁原始碼裡，不是密鑰。";
-    return;
+// ── 通行票 ──────────────────────────────────────────────
+//
+// 票是工作站發的（那裡已經有 Google 登入與權限檢查）。
+// 它放在網址的 # 後面 —— 那一段瀏覽器不會送給伺服器，
+// 拿到之後立刻從網址列清掉，免得留在瀏覽紀錄或截圖裡。
+function pickTicket() {
+  var m = String(location.hash || "").match(/[#&]t=([^&]+)/);
+  if (m) {
+    TICKET = decodeURIComponent(m[1]);
+    try { sessionStorage.setItem("bs_ticket", TICKET); } catch (e) {}
+    history.replaceState(null, "", location.pathname);
+    return true;
   }
-  google.accounts.id.initialize({ client_id: CLIENT_ID, callback: onCredential });
-  google.accounts.id.renderButton($("gbtn"), { theme: "outline", size: "large", locale: "zh_TW", width: 260 });
+  try { TICKET = sessionStorage.getItem("bs_ticket") || ""; } catch (e) {}
+  return !!TICKET;
 }
 
-function onCredential(res) {
-  TOKEN = res.credential;
-  try { sessionStorage.setItem("bs_tok", TOKEN); } catch (e) {}
-  load();
-}
-
-function fail(msg) {
+function fail(title, msg) {
   $("app").classList.add("hide");
   $("gate").classList.remove("hide");
-  $("gateErr").classList.remove("hide");
-  $("gateErr").textContent = msg;
+  $("gateTitle").textContent = title;
+  $("gateMsg").textContent = msg;
+  $("gateErr").classList.add("hide");
 }
 
 // ── 抓資料（只抓這一次，之後換區間都在本機算）──────────
@@ -230,14 +226,17 @@ function load() {
   fetch(API + "?view=linestats", {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ idToken: TOKEN })
+    body: JSON.stringify({ ticket: TICKET })
   })
   .then(function (r) { return r.json(); })
   .then(function (d) {
     if (!d.ok) {
-      if (d.error === "NOT_ALLOWED") return fail("這個帳號（" + (d.email || "") + "）不在儀表板名單裡。請用有權限的帳號登入。");
-      if (d.error === "NOT_SIGNED_IN" || d.error === "VERIFY_FAILED") return fail("登入驗證沒過，請重新登入一次。");
-      return fail("後端回報錯誤：" + d.error + (d.detail ? "（" + d.detail + "）" : ""));
+      try { sessionStorage.removeItem("bs_ticket"); } catch (e) {}
+      if (d.error === "TICKET_INVALID")
+        return fail("通行票過期了", "通行票 8 小時有效。回工作站再點一次就好。");
+      if (d.error === "NOT_ALLOWED")
+        return fail("這個帳號沒有權限", (d.email || "") + " 目前看不到這份報表。需要「管理帳號與權限」這一項。");
+      return fail("後端回報錯誤", d.error + (d.detail ? "（" + d.detail + "）" : ""));
     }
     PREFIX = d.prefixes || {};
     CATALOG = {};
@@ -249,7 +248,7 @@ function load() {
     $("app").classList.remove("hide");
     setRange(30);
   })
-  .catch(function (e) { fail("連不到後端：" + e.message); });
+  .catch(function (e) { fail("連不到後端", e.message); });
 }
 
 // ── 分類與名稱 ──────────────────────────────────────────
@@ -406,17 +405,14 @@ document.addEventListener("click", function (ev) {
 });
 document.addEventListener("click", function (e) {
   if (e.target.id === "out") {
-    try { sessionStorage.removeItem("bs_tok"); } catch (x) {}
+    try { sessionStorage.removeItem("bs_ticket"); } catch (x) {}
     location.reload();
   }
 });
 
-// 同一個分頁內重新整理不用再登入一次（token 只存在分頁的生命週期裡）
-try {
-  var saved = sessionStorage.getItem("bs_tok");
-  if (saved) { TOKEN = saved; load(); }
-} catch (e) {}
+// ── 啟動 ────────────────────────────────────────────────
+$("goWs").href = WORKSTATION;
+if (pickTicket()) { load(); }
 </script>
-<script src="https://accounts.google.com/gsi/client" onload="gsiReady()" async defer></script>
 </body>
 </html>

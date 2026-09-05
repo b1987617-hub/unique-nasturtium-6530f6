@@ -27,9 +27,5 @@ export default {
   lineStats: {
     // Apps Script 後端（跟 _redirects 裡的 /line 轉址是同一個部署）
     api: "https://script.google.com/macros/s/AKfycbxd9rt_rzQCUVjgzDDRlva3gEBzk3keELksy87RBbZgXvq5Xf9nNwpXDWLt4fzwi4iLqA/exec",
-    // Google 登入用的 OAuth 網頁用戶端 ID。
-    // 這是公開值（會出現在網頁原始碼裡），不是密鑰。
-    // 到 console.cloud.google.com/apis/credentials 建立後填在這裡。
-    clientId: ""
   }
 };
