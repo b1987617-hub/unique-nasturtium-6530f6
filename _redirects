@@ -6,6 +6,10 @@
 # 走自己的網域，之後換後端只要改這個檔。
 #
 # Netlify 的查詢參數要寫在「來源」那一欄，不是接在網址後面。
+#
+# 規則由上往下比對，最specific的要放最前面。
+# 帶預填訊息的（文章、分類頁會帶 m=）
+/line  src=:src m=:m  https://script.google.com/macros/s/AKfycbxd9rt_rzQCUVjgzDDRlva3gEBzk3keELksy87RBbZgXvq5Xf9nNwpXDWLt4fzwi4iLqA/exec?view=line&src=:src&m=:m  302
 /line  src=:src  https://script.google.com/macros/s/AKfycbxd9rt_rzQCUVjgzDDRlva3gEBzk3keELksy87RBbZgXvq5Xf9nNwpXDWLt4fzwi4iLqA/exec?view=line&src=:src  302
 
 # 沒帶 src 時也要能用（有人手打 baseon.com.tw/line）

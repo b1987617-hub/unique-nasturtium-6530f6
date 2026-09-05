@@ -1,0 +1,45 @@
+---
+layout: base.njk
+permalink: /blog/index.html
+eleventyExcludeFromCollections: true
+title: 商務知識文章｜工商登記、公司設立、辦公空間指南
+metaTitle: 商務知識文章｜工商登記・公司設立・竹北辦公室指南｜貝森國際商務中心
+lineSrc: seo_index
+description: 貝森國際商務中心整理工商登記、公司設立、登記地址、辦公空間選擇的實務指南，用做過幾百家企業的經驗，把新創與中小企業最常卡住的問題一次講清楚。
+---
+
+<div class="art">
+
+  <nav class="crumb" aria-label="麵包屑">
+    <a href="/">首頁</a><i>›</i><span>知識文章</span>
+  </nav>
+
+  <header class="list-head">
+    <span class="eyebrow">Knowledge</span>
+    <h1>商務知識文章</h1>
+    <p>工商登記、公司設立、登記地址、辦公空間怎麼挑——把新創與中小企業最常卡住的問題，用實務經驗一次講清楚。</p>
+  </header>
+
+  <div class="chips">
+    <a href="/blog/" class="chip on">全部<em>{{ collections.posts.length }}</em></a>
+    {%- for c in collections.categories %}
+    <a href="/blog/c/{{ c.slug }}/" class="chip">{{ c.title }}<em>{{ c.count }}</em></a>
+    {%- endfor %}
+  </div>
+
+  {%- if collections.posts.length %}
+  <div class="cards">
+    {%- for p in collections.posts %}
+    <a class="card" href="{{ p.url }}">
+      <div class="k">{{ p.data.category or "商務知識" }}</div>
+      <h3>{{ p.data.title }}</h3>
+      <p>{{ p.data.description | truncate(74) }}</p>
+      <div class="d">{{ (p.data.updated or p.date) | twDate }}</div>
+    </a>
+    {%- endfor %}
+  </div>
+  {%- else %}
+  <p class="empty">文章準備中，敬請期待。</p>
+  {%- endif %}
+
+</div>

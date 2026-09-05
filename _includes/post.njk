@@ -1,0 +1,195 @@
+---
+layout: base.njk
+ogType: article
+---
+{% set built = content %}
+{% set heads = built | toc %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": {{ (site.url + "/#org") | dump | safe }},
+      "name": {{ site.name | dump | safe }},
+      "alternateName": {{ site.nameEn | dump | safe }},
+      "url": {{ (site.url + "/") | dump | safe }},
+      "logo": {
+        "@type": "ImageObject",
+        "url": {{ (site.url + "/logo.png") | dump | safe }}
+      },
+      "sameAs": [{{ site.fb | dump | safe }}]
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": {{ (site.url + "/#localbusiness") | dump | safe }},
+      "name": {{ site.name | dump | safe }},
+      "url": {{ (site.url + "/") | dump | safe }},
+      "image": {{ (site.url + "/logo.png") | dump | safe }},
+      "telephone": {{ site.telE164 | dump | safe }},
+      "email": {{ site.email | dump | safe }},
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": {{ site.addr.street | dump | safe }},
+        "addressLocality": {{ site.addr.city | dump | safe }},
+        "addressRegion": {{ site.addr.region | dump | safe }},
+        "postalCode": {{ site.addr.postal | dump | safe }},
+        "addressCountry": {{ site.addr.country | dump | safe }}
+      },
+      "openingHours": {{ site.hours | dump | safe }},
+      "parentOrganization": { "@id": {{ (site.url + "/#org") | dump | safe }} }
+    },
+    {
+      "@type": "WebSite",
+      "@id": {{ (site.url + "/#website") | dump | safe }},
+      "url": {{ (site.url + "/") | dump | safe }},
+      "name": {{ site.name | dump | safe }},
+      "inLanguage": "zh-Hant-TW",
+      "publisher": { "@id": {{ (site.url + "/#org") | dump | safe }} }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": {{ (site.url + page.url + "#article") | dump | safe }},
+      "isPartOf": { "@id": {{ (site.url + "/#website") | dump | safe }} },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": {{ (site.url + page.url) | dump | safe }} },
+      "headline": {{ title | dump | safe }},
+      "description": {{ description | dump | safe }},
+      "inLanguage": "zh-Hant-TW",
+      "datePublished": {{ (date | isoDate) | dump | safe }},
+      "dateModified": {{ ((updated or date) | isoDate) | dump | safe }},
+      "image": {{ (site.url + "/" + (cover or "space-1.webp")) | dump | safe }},
+      "author": { "@id": {{ (site.url + "/#org") | dump | safe }} },
+      "publisher": { "@id": {{ (site.url + "/#org") | dump | safe }} }
+      {%- if keywords %},
+      "keywords": {{ keywords | dump | safe }}
+      {%- endif %}
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": {{ (site.url + page.url + "#breadcrumb") | dump | safe }},
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": {{ (site.url + "/") | dump | safe }} },
+        { "@type": "ListItem", "position": 2, "name": "知識文章", "item": {{ (site.url + "/blog/") | dump | safe }} },
+        {%- if thisCat %}
+        { "@type": "ListItem", "position": 3, "name": {{ thisCat.title | dump | safe }}, "item": {{ (site.url + "/blog/c/" + thisCat.slug + "/") | dump | safe }} },
+        { "@type": "ListItem", "position": 4, "name": {{ title | dump | safe }} }
+        {%- else %}
+        { "@type": "ListItem", "position": 3, "name": {{ title | dump | safe }} }
+        {%- endif %}
+      ]
+    }
+    {%- if faq and faq.length %},
+    {
+      "@type": "FAQPage",
+      "@id": {{ (site.url + page.url + "#faq") | dump | safe }},
+      "mainEntity": [
+        {%- for f in faq %}
+        {
+          "@type": "Question",
+          "name": {{ f.q | dump | safe }},
+          "acceptedAnswer": { "@type": "Answer", "text": {{ f.a | dump | safe }} }
+        }{% if not loop.last %},{% endif %}
+        {%- endfor %}
+      ]
+    }
+    {%- endif %}
+  ]
+}
+</script>
+
+<div class="art">
+
+  <nav class="crumb" aria-label="麵包屑">
+    {%- set thisCat = collections.categories | catOf(category) %}
+    <a href="/">首頁</a><i>›</i><a href="/blog/">知識文章</a>{% if thisCat %}<i>›</i><a href="/blog/c/{{ thisCat.slug }}/">{{ thisCat.title }}</a>{% endif %}<i>›</i><span>{{ title }}</span>
+  </nav>
+
+  <article>
+    <header class="art-head">
+      <h1>{{ title }}</h1>
+      <div class="art-meta">
+        <time datetime="{{ date | isoDate }}">發布 {{ date | twDate }}</time>
+        {%- if updated %}
+        <span class="dot"></span>
+        <time datetime="{{ updated | isoDate }}">最後更新 {{ updated | twDate }}</time>
+        {%- endif %}
+        <span class="dot"></span>
+        <span>{{ site.name }}</span>
+      </div>
+      {%- if lede %}
+      <p class="lede">{{ lede }}</p>
+      {%- endif %}
+    </header>
+
+    {%- if cover %}
+    <figure class="art-cover">
+      <img src="/{{ cover }}" alt="{{ coverAlt or title }}" width="1200" height="675" loading="eager">
+    </figure>
+    {%- endif %}
+
+    {%- if heads.length %}
+    <nav class="toc" aria-label="文章目錄">
+      <h2>文章目錄</h2>
+      <ol>
+        {%- for h in heads %}
+        <li><a href="#{{ h.id }}">{{ h.text }}</a></li>
+        {%- endfor %}
+      </ol>
+    </nav>
+    {%- endif %}
+
+    <div class="body">
+      {{ content | safe }}
+    </div>
+
+    {%- if faq and faq.length %}
+    <section class="faq">
+      <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;margin-bottom:12px">常見問題 FAQ</h2>
+      {%- for f in faq %}
+      <details{% if loop.first %} open{% endif %}>
+        <summary>{{ f.q }}</summary>
+        <div class="a">{{ f.a }}</div>
+      </details>
+      {%- endfor %}
+    </section>
+    {%- endif %}
+
+    <section class="cta">
+      <h2>{{ ctaTitle or "想在竹北台元找一個乾淨、專業的登記地址？" }}</h2>
+      <p>{{ ctaText or "貝森國際商務中心位於竹北市博愛街，緊鄰台元科技園區。歡迎加 LINE 詢問，或留下需求由專人為你評估最合適的方案。" }}</p>
+      <div class="acts">
+        {%- set msg = lineMessage or lineMessages[category] %}
+        <a href="/line?src={{ lineSrc }}{% if msg %}&m={{ msg | urlencode }}{% endif %}" target="_blank" rel="noopener" class="btn btn-line">加 LINE 詢問 {{ site.lineId }}</a>
+        <a href="/form.html" class="btn btn-ghost">填寫需求表單</a>
+      </div>
+    </section>
+
+  </article>
+
+  {%- if thisCat and thisCat.count > 1 %}
+  <a class="morecat" href="/blog/c/{{ thisCat.slug }}/">
+    <span class="k">{{ thisCat.title }}</span>
+    <span class="t">看更多「{{ thisCat.title }}」的文章</span>
+    <span class="n">共 {{ thisCat.count }} 篇 →</span>
+  </a>
+  {%- endif %}
+
+  {%- set others = collections.posts | others(page.url, 3) %}
+  {%- if others.length %}
+  <section class="more">
+    <h2>更多文章</h2>
+    <div class="cards">
+      {%- for p in others %}
+      <a class="card" href="{{ p.url }}">
+        <div class="k">{{ p.data.category or "商務知識" }}</div>
+        <h3>{{ p.data.title }}</h3>
+        <p>{{ p.data.description | truncate(62) }}</p>
+        <div class="d">{{ p.date | twDate }}</div>
+      </a>
+      {%- endfor %}
+    </div>
+  </section>
+  {%- endif %}
+
+</div>

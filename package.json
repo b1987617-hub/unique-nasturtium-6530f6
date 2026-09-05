@@ -1,0 +1,15 @@
+{
+  "name": "baseon-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "貝森國際商務中心官網 baseon.com.tw",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "markdown-it-anchor": "^9.2.0"
+  },
+  "type": "module"
+}

@@ -1,0 +1,133 @@
+backend:
+  name: github
+  repo: b1987617-hub/unique-nasturtium-6530f6
+  branch: main
+  commit_messages:
+    create: '新增文章：{{slug}}'
+    update: '更新文章：{{slug}}'
+    delete: '刪除文章：{{slug}}'
+    uploadMedia: '上傳圖片：{{path}}'
+    deleteMedia: '刪除圖片：{{path}}'
+
+locale: zh_Hant
+site_url: https://baseon.com.tw
+display_url: https://baseon.com.tw
+logo_url: https://baseon.com.tw/logo.png
+
+media_folder: "blog/images"
+public_folder: "/blog/images"
+
+collections:
+  - name: "posts"
+    label: "知識文章"
+    label_singular: "文章"
+    folder: "blog"
+    extension: "md"
+    format: "yaml-frontmatter"
+    create: true
+    slug: "{{fields.slug}}"
+    summary: "{{title}}"
+    sortable_fields: ["date", "title"]
+    editor:
+      preview: false
+    fields:
+      - label: "標題（H1，會顯示在文章最上面）"
+        name: "title"
+        widget: "string"
+        hint: "格式：主關鍵字＋次關鍵字｜補充。例：工商登記是什麼？費用、流程、地址一次看懂"
+
+      - label: "網址代稱 slug（英文小寫，用 - 連接）"
+        name: "slug"
+        widget: "string"
+        pattern: ["^[a-z0-9]+(-[a-z0-9]+)*$", "只能用英文小寫、數字和連字號 -"]
+        hint: "⚠️ 上線後不要再改，改了等於整篇重新被 Google 收錄。例：business-registration-guide"
+
+      - label: "搜尋結果標題（留空就用上面的標題）"
+        name: "metaTitle"
+        widget: "string"
+        required: false
+        hint: "建議 30 字內，結尾加「｜貝森國際商務中心」"
+
+      - label: "搜尋結果描述 meta description"
+        name: "description"
+        widget: "text"
+        pattern: ["^.{40,160}$", "請寫 40～160 字"]
+        hint: "80～120 字最佳。這段會顯示在 Google 搜尋結果，要寫得讓人想點。"
+
+      - label: "開場摘要（顯示在標題下方的那段）"
+        name: "lede"
+        widget: "text"
+        required: false
+        hint: "直接寫出客人心裡那句話，不要自我介紹。"
+
+      - label: "發布日期"
+        name: "date"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        picker_utc: false
+
+      - label: "最後更新日期"
+        name: "updated"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        picker_utc: false
+        required: false
+        hint: "每次實質改內容就更新這裡，Google 會知道文章是新的。"
+
+      - label: "分類"
+        name: "category"
+        widget: "select"
+        default: "工商登記"
+        options: ["工商登記", "公司設立", "辦公空間", "會議室", "活動場地", "經營知識"]
+
+      - label: "封面圖"
+        name: "cover"
+        widget: "image"
+        required: false
+        hint: "留空會用預設的空間照。"
+
+      - label: "封面圖替代文字 alt"
+        name: "coverAlt"
+        widget: "string"
+        required: false
+        hint: "⚠️ 每張圖的 alt 都要不一樣，各自帶一個關鍵字。"
+
+      - label: "關鍵字（逗號分隔）"
+        name: "keywords"
+        widget: "string"
+        required: false
+
+      - label: "草稿（勾起來就不會出現在網站上）"
+        name: "draft"
+        widget: "boolean"
+        default: false
+        required: false
+
+      - label: "內文"
+        name: "body"
+        widget: "markdown"
+        hint: "用「## 」開一個段落標題，標題寫成問句，下一句直接把答案講完。"
+
+      - label: "常見問題 FAQ"
+        name: "faq"
+        widget: "list"
+        required: false
+        label_singular: "一組問答"
+        summary: "{{fields.q}}"
+        hint: "建議 5～6 組。這區會被標記成 FAQ 結構化資料，Google 可能直接顯示在搜尋結果。"
+        fields:
+          - { label: "問題", name: "q", widget: "string" }
+          - { label: "答案（純文字，不要用 Markdown）", name: "a", widget: "text" }
+
+      - label: "文末行動呼籲標題"
+        name: "ctaTitle"
+        widget: "string"
+        required: false
+        hint: "留空會用預設的。"
+
+      - label: "文末行動呼籲說明"
+        name: "ctaText"
+        widget: "text"
+        required: false
