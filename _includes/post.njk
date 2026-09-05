@@ -153,7 +153,7 @@ ogType: article
       <h2>{{ ctaTitle or "想在竹北台元找一個乾淨、專業的登記地址？" }}</h2>
       <p>{{ ctaText or "貝森國際商務中心位於竹北市博愛街，緊鄰台元科技園區。歡迎加 LINE 詢問，或留下需求由專人為你評估最合適的方案。" }}</p>
       <div class="acts">
-        <a href="{{ site.line }}" target="_blank" rel="noopener" class="btn btn-line">加 LINE 詢問 {{ site.lineId }}</a>
+        <a href="/line?src={{ lineSrc }}" target="_blank" rel="noopener" class="btn btn-line">加 LINE 詢問 {{ site.lineId }}</a>
         <a href="/form.html" class="btn btn-ghost">填寫需求表單</a>
       </div>
     </section>

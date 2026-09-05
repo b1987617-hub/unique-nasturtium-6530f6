@@ -1,20 +1,51 @@
 import anchor from "markdown-it-anchor";
 
 export default function (eleventyConfig) {
-  // ── 原有網站檔案原封不動搬過去（index.html 完全不碰） ──
-  for (const f of [
-    "index.html", "form.html", "robots.txt", "_headers",
-    "logo.png", "logo.webp", "qr.webp",
-    "space-1.webp", "space-2.webp", "space-3.webp", "space-4.webp",
-    "space-5.webp", "space-6.webp", "space-7.webp",
-    "admin"
+  // ── 原有網站檔案原封不動搬過去 ──
+  //
+  // ⚠️ 這裡「不」明列檔名。曾經明列過，結果差點出事：
+  //    _redirects 是後來才加進 main 的，不在清單裡 → 建置後不會被複製 →
+  //    baseon.com.tw/line?src=xxx 直接 404，名片、招牌、DM 上的 QR 全部失效，
+  //    而網站看起來完全正常。
+  //    改成整批複製，新檔案會自動跟著走，不需要有人記得回來改這裡。
+  for (const g of [
+    "*.html", "*.webp", "*.png", "*.jpg", "*.svg", "*.ico",
+    "*.txt", "*.xml", "*.pdf",
+    "_headers", "_redirects",
+    "admin", "blog/images"
   ]) {
-    eleventyConfig.addPassthroughCopy(f);
+    eleventyConfig.addPassthroughCopy(g);
   }
-  eleventyConfig.addPassthroughCopy("blog/images");
 
   eleventyConfig.ignores.add("node_modules/**");
   eleventyConfig.ignores.add("README.md");
+
+  // ── 建置後自我檢查：原始碼裡有的檔，產出裡一定要有 ──
+  //
+  // 這是上面那個坑的保險。少一個檔就讓建置失敗，Netlify 就不會部署，
+  // 現有網站原樣保留 —— 寧可紅字停下來，也不要安靜地上線一個壞掉的網站。
+  eleventyConfig.on("eleventy.after", async () => {
+    const fs = await import("node:fs");
+    // 這些是「原始碼」，本來就不該原封不動出現在產出裡
+    const sourceExt = [".njk", ".md", ".mjs", ".js", ".json", ".yml", ".yaml", ".toml", ".lock"];
+    const missing = fs.readdirSync(".", { withFileTypes: true })
+      .filter((d) => d.isFile() && !d.name.startsWith("."))
+      .map((d) => d.name)
+      .filter((n) => !sourceExt.some((e) => n.toLowerCase().endsWith(e)))
+      .filter((n) => !fs.existsSync(`_site/${n}`));
+
+    if (missing.length) {
+      throw new Error(
+        `建置產出少了這些檔案，部署會壞掉：${missing.join("、")}\n` +
+        `→ 到 eleventy.config.mjs 的 passthroughCopy 補上對應的副檔名。`
+      );
+    }
+    for (const must of ["index.html", "form.html", "_redirects", "_headers"]) {
+      if (!fs.existsSync(`_site/${must}`)) {
+        throw new Error(`關鍵檔案 ${must} 沒有被複製到 _site，建置中止。`);
+      }
+    }
+  });
 
   // ── 標題自動產生錨點 id，目錄才抓得到 ──
   eleventyConfig.amendLibrary("md", (md) => {
