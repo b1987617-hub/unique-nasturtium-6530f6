@@ -126,13 +126,19 @@ eleventyExcludeFromCollections: true
 
 <!-- ══ 儀表板 ══ -->
 <div id="app" class="hide">
+  <style>
+    .wsbtn{display:inline-block;margin-right:10px;padding:6px 14px;border-radius:6px;
+      border:1px solid #C9D2D8;background:#fff;color:#20384A;font-size:13px;
+      text-decoration:none;cursor:pointer;white-space:nowrap}
+    .wsbtn:hover{border-color:#4F7460;color:#4F7460}
+  </style>
   <header>
     <div class="wrap hd">
       <div>
         <div class="mk">BASE<span class="o">O</span>N SPACE</div>
         <div class="sub">加好友來源成效</div>
       </div>
-      <div class="who"><span id="me"></span><button id="out">重新整理</button></div>
+      <div class="who"><span id="me"></span><a id="backWs" class="wsbtn">&larr; 回工作站</a><button id="out">重新整理</button></div>
     </div>
   </header>
 
@@ -200,15 +206,43 @@ var fmt = function (n) { return Number(n).toLocaleString("zh-TW"); };
 // 票是工作站發的（那裡已經有 Google 登入與權限檢查）。
 // 它放在網址的 # 後面 —— 那一段瀏覽器不會送給伺服器，
 // 拿到之後立刻從網址列清掉，免得留在瀏覽紀錄或截圖裡。
+// 通行票存哪裡：
+//   原本只放 sessionStorage —— 那是「單一分頁」的暫存，重新整理到新的環境、
+//   或另開一個分頁，票就不見了，使用者看到「請從工作站進入」會以為系統壞了。
+//   改成 localStorage 並自己記到期時間，壽命跟票一樣（8 小時），
+//   不會比原本多暴露什麼；票一失效就立刻清掉。
+var TICKET_KEY = "bs_ticket";
+var TICKET_EXP_KEY = "bs_ticket_exp";
+var TICKET_TTL_MS = 8 * 60 * 60 * 1000;
+
+function saveTicket(t) {
+  try {
+    localStorage.setItem(TICKET_KEY, t);
+    localStorage.setItem(TICKET_EXP_KEY, String(Date.now() + TICKET_TTL_MS));
+  } catch (e) {}
+  try { sessionStorage.setItem(TICKET_KEY, t); } catch (e) {}
+}
+
+function clearTicket() {
+  try { localStorage.removeItem(TICKET_KEY); localStorage.removeItem(TICKET_EXP_KEY); } catch (e) {}
+  try { sessionStorage.removeItem(TICKET_KEY); } catch (e) {}
+}
+
 function pickTicket() {
   var m = String(location.hash || "").match(/[#&]t=([^&]+)/);
   if (m) {
     TICKET = decodeURIComponent(m[1]);
-    try { sessionStorage.setItem("bs_ticket", TICKET); } catch (e) {}
+    saveTicket(TICKET);
+    // 從網址列清掉，免得留在瀏覽紀錄或截圖裡
     history.replaceState(null, "", location.pathname);
     return true;
   }
-  try { TICKET = sessionStorage.getItem("bs_ticket") || ""; } catch (e) {}
+  try {
+    var exp = Number(localStorage.getItem(TICKET_EXP_KEY) || 0);
+    if (exp && Date.now() < exp) TICKET = localStorage.getItem(TICKET_KEY) || "";
+    else if (exp) clearTicket();
+  } catch (e) {}
+  if (!TICKET) { try { TICKET = sessionStorage.getItem(TICKET_KEY) || ""; } catch (e) {} }
   return !!TICKET;
 }
 
@@ -231,7 +265,7 @@ function load() {
   .then(function (r) { return r.json(); })
   .then(function (d) {
     if (!d.ok) {
-      try { sessionStorage.removeItem("bs_ticket"); } catch (e) {}
+      clearTicket();
       if (d.error === "TICKET_INVALID")
         return fail("通行票過期了", "通行票 8 小時有效。回工作站再點一次就好。");
       if (d.error === "NOT_ALLOWED")
@@ -405,13 +439,14 @@ document.addEventListener("click", function (ev) {
 });
 document.addEventListener("click", function (e) {
   if (e.target.id === "out") {
-    try { sessionStorage.removeItem("bs_ticket"); } catch (x) {}
+    clearTicket();
     location.reload();
   }
 });
 
 // ── 啟動 ────────────────────────────────────────────────
 $("goWs").href = WORKSTATION;
+if ($("backWs")) $("backWs").href = WORKSTATION;
 if (pickTicket()) { load(); }
 </script>
 </body>
