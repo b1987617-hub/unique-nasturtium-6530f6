@@ -1,0 +1,10 @@
+# 加好友短網址：baseon.com.tw/line?src=xxx
+#
+# 為什麼要有這一層：那些連結會印在 Google 商家、粉專、文章、名片上，
+# 是幾乎不會再改的地方。直接用 script.google.com 的網址有三個問題 ——
+# 又長又不像貝森、之後後端一換就全部失效、而且看起來不像正式網站。
+# 走自己的網域，之後換後端只要改這一行。
+/line  https://script.google.com/macros/s/AKfycbxd9rt_rzQCUVjgzDDRlva3gEBzk3keELksy87RBbZgXvq5Xf9nNwpXDWLt4fzwi4iLqA/exec?view=line&src=:src  302  src=:src
+
+# 沒帶 src 時也要能用（例如有人手打 baseon.com.tw/line）
+/line  https://script.google.com/macros/s/AKfycbxd9rt_rzQCUVjgzDDRlva3gEBzk3keELksy87RBbZgXvq5Xf9nNwpXDWLt4fzwi4iLqA/exec?view=line&src=direct  302
