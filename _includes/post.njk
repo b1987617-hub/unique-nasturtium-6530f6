@@ -70,7 +70,7 @@ ogType: article
       "@id": {{ (site.url + page.url + "#breadcrumb") | dump | safe }},
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "首頁", "item": {{ (site.url + "/") | dump | safe }} },
-        { "@type": "ListItem", "position": 2, "name": "知識文章", "item": {{ (site.url + "/blog/") | dump | safe }} },
+        { "@type": "ListItem", "position": 2, "name": "經營指南", "item": {{ (site.url + "/blog/") | dump | safe }} },
         {%- if thisCat %}
         { "@type": "ListItem", "position": 3, "name": {{ thisCat.title | dump | safe }}, "item": {{ (site.url + "/blog/c/" + thisCat.slug + "/") | dump | safe }} },
         { "@type": "ListItem", "position": 4, "name": {{ title | dump | safe }} }
@@ -102,7 +102,7 @@ ogType: article
 
   <nav class="crumb" aria-label="麵包屑">
     {%- set thisCat = collections.categories | catOf(category) %}
-    <a href="/">首頁</a><i>›</i><a href="/blog/">知識文章</a>{% if thisCat %}<i>›</i><a href="/blog/c/{{ thisCat.slug }}/">{{ thisCat.title }}</a>{% endif %}<i>›</i><span>{{ title }}</span>
+    <a href="/">首頁</a><i>›</i><a href="/blog/">經營指南</a>{% if thisCat %}<i>›</i><a href="/blog/c/{{ thisCat.slug }}/">{{ thisCat.title }}</a>{% endif %}<i>›</i><span>{{ title }}</span>
   </nav>
 
   <article>

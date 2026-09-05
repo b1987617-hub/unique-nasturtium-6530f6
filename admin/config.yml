@@ -19,7 +19,7 @@ public_folder: "/blog/images"
 
 collections:
   - name: "posts"
-    label: "知識文章"
+    label: "經營指南"
     label_singular: "文章"
     folder: "blog"
     extension: "md"
